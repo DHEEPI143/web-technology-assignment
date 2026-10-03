@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Web Technology Questions</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #fff7f8;
+        }
+
+        header {
+            background: linear-gradient(135deg, #ff758c, #ff7eb3);
+            color: white;
+            text-align: center;
+            padding: 25px;
+        }
+
+        .main {
+            width: 90%;
+            max-width: 900px;
+            margin: 30px auto;
+        }
+
+        .question {
+            background: white;
+            padding: 25px;
+            margin-bottom: 25px;
+            border-radius: 18px;
+            box-shadow: 0 5px 15px #ddd;
+        }
+
+        h2 {
+            color: #d94f70;
+        }
+
+        input {
+            width: 95%;
+            padding: 11px;
+            margin: 7px 0;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+
+        button {
+            background: #d94f70;
+            color: white;
+            border: none;
+            padding: 11px 22px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background: #b93759;
+        }
+
+        .output {
+            display: none;
+            margin-top: 18px;
+            padding: 18px;
+            background: #fff0f3;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h1>Web Technology Assignment</h1>
+    <p>Servlet, JSP & AJAX Demonstration</p>
+</header>
+
+<div class="main">
+
+    <!-- QUESTION 1 -->
+
+    <div class="question">
+
+        <h2>Question 1 - Java Servlet</h2>
+
+        <p>
+            Create a form to collect student details and display
+            the entered information dynamically.
+        </p>
+
+        <input type="text" id="name1" placeholder="Enter Student Name">
+
+        <input type="text" id="roll1" placeholder="Enter Roll Number">
+
+        <input type="text" id="dept1" placeholder="Enter Department">
+
+        <input type="email" id="email1" placeholder="Enter Email">
+
+        <br>
+
+        <button onclick="showServletData()">
+            Submit Details
+        </button>
+
+        <div id="output1" class="output"></div>
+
+    </div>
+
+
+    <!-- QUESTION 2 -->
+
+    <div class="question">
+
+        <h2>Question 2 - JSP & JavaBean</h2>
+
+        <p>
+            Use a JavaBean concept to store student information
+            and display the submitted details.
+        </p>
+
+        <input type="text" id="name2" placeholder="Student Name">
+
+        <input type="text" id="roll2" placeholder="Roll Number">
+
+        <input type="text" id="dept2" placeholder="Department">
+
+        <input type="text" id="year2" placeholder="Academic Year">
+
+        <br>
+
+        <button onclick="showBeanData()">
+            Display Student
+        </button>
+
+        <div id="output2" class="output"></div>
+
+    </div>
+
+
+    <!-- QUESTION 3 -->
+
+    <div class="question">
+
+        <h2>Question 3 - AJAX</h2>
+
+        <p>
+            Retrieve student information from an XML file
+            without refreshing the webpage.
+        </p>
+
+        <button onclick="getStudentData()">
+            Fetch Student Data
+        </button>
+
+        <div id="output3" class="output"></div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+function showServletData() {
+
+    let name = document.getElementById("name1").value;
+    let roll = document.getElementById("roll1").value;
+    let dept = document.getElementById("dept1").value;
+    let email = document.getElementById("email1").value;
+
+    let result = document.getElementById("output1");
+
+    result.style.display = "block";
+
+    result.innerHTML =
+        "<b>Submitted Student Information</b><br><br>" +
+        "Name: " + name + "<br>" +
+        "Roll Number: " + roll + "<br>" +
+        "Department: " + dept + "<br>" +
+        "Email: " + email;
+}
+
+
+function showBeanData() {
+
+    let name = document.getElementById("name2").value;
+    let roll = document.getElementById("roll2").value;
+    let dept = document.getElementById("dept2").value;
+    let year = document.getElementById("year2").value;
+
+    let result = document.getElementById("output2");
+
+    result.style.display = "block";
+
+    result.innerHTML =
+        "<b>Student Registration</b><br><br>" +
+        "Student Name: " + name + "<br>" +
+        "Roll Number: " + roll + "<br>" +
+        "Department: " + dept + "<br>" +
+        "Year: " + year;
+}
+
+
+function getStudentData() {
+
+    fetch("students.xml")
+
+    .then(response => response.text())
+
+    .then(data => {
+
+        let parser = new DOMParser();
+
+        let xml = parser.parseFromString(data, "text/xml");
+
+        let students = xml.getElementsByTagName("student");
+
+        let output = "";
+
+        for (let i = 0; i < students.length; i++) {
+
+            let name =
+                students[i].getElementsByTagName("name")[0].textContent;
+
+            let roll =
+                students[i].getElementsByTagName("roll")[0].textContent;
+
+            let department =
+                students[i].getElementsByTagName("department")[0].textContent;
+
+            output +=
+                "<div style='padding:12px;margin:8px 0;background:white;border-radius:8px;'>" +
+                "<b>Name:</b> " + name + "<br>" +
+                "<b>Roll Number:</b> " + roll + "<br>" +
+                "<b>Department:</b> " + department +
+                "</div>";
+        }
+
+        document.getElementById("output3").style.display = "block";
+
+        document.getElementById("output3").innerHTML = output;
+
+    })
+
+    .catch(error => {
+
+        document.getElementById("output3").style.display = "block";
+
+        document.getElementById("output3").innerHTML =
+            "Student data could not be loaded.";
+
+    });
+}
+
+</script>
+
+</body>
+</html>
